@@ -1,0 +1,100 @@
+solid testconcave.stl
+ facet normal 0 0 0 
+  outer loop
+   vertex -0.00493 0.10454 0.00627
+   vertex -0.00486 0.09811 0.01361
+   vertex -0.08174 0.17409 0.00139
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex -0.07752 0.16868 -0.01523
+   vertex -0.07767 0.18835 -0.02150
+   vertex -0.08070 0.20504 -0.01498
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex -0.07255 0.22179 -0.00103
+   vertex -0.07461 0.18021 0.02305
+   vertex -0.07107 0.07222 0.13715
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex -0.07080 0.06688 0.13599
+   vertex -0.04216 0.05841 0.10831
+   vertex -0.03430 0.06278 0.09729
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.01062 0.09739 0.06922
+   vertex 0.03542 0.09251 0.08528
+   vertex 0.03011 0.09508 0.11792
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.02425 0.08779 0.04333
+   vertex 0.00334 0.06523 0.12150
+   vertex -0.00179 0.05874 0.12077
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.00613 0.06123 0.13910
+   vertex 0.00545 0.07034 0.18630
+   vertex 0.00482 0.08610 0.02978
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex -0.00117 0.08789 0.02188
+   vertex 0.05641 0.08880 0.04185
+   vertex 0.09762 0.06015 0.07776
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.07219 0.08411 0.06370
+   vertex 0.08966 0.08476 0.06564
+   vertex 0.09957 0.07215 0.06025
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.04093 0.09003 -0.02749
+   vertex 0.09706 0.13950 -0.06139
+   vertex 0.09233 0.14747 -0.06111
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.09602 0.14856 -0.07862
+   vertex 0.09183 0.14238 -0.04603
+   vertex 0.08788 0.14617 -0.09444
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.08993 0.13887 -0.07438
+   vertex 0.15415 0.07614 0.04085
+   vertex 0.17160 0.05764 0.04529
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.14837 0.03811 0.02074
+   vertex 0.19067 0.02820 0.02253
+   vertex 0.20490 0.03148 0.02299
+  endloop
+ endfacet
+ facet normal 0 0 0 
+  outer loop
+   vertex 0.15647 0.05366 0.06738
+   vertex 0.12402 0.07698 0.06727
+   vertex 0.10707 0.09277 0.08076
+  endloop
+ endfacet
+endsolid testconcave.stl
