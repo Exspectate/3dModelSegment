@@ -212,16 +212,8 @@ void bsp_Frame3::FindLine(Mesh& mesh, Point3d nowNode, Point3d endNode, vector<P
 //调用此方法需要保证f1 f2特征线计算完毕
 void bsp_Frame3::findfeatureLines(Mesh & mesh)
 {
-	//计算上方向
-	Point3d t1 = this->R - this->L;   //L->R
-	Point3d t2 = this->belongTo->f2->L - this->L;    //曲线2左端点->L(->R)
-
-	Vector13 tV1 = Vector13(t1.x, t1.y, t1.z);
-	Vector13 tV2 = Vector13(t2.x, t2.y, t2.z);
-	this->Up = tV1.crossmult(tV2);
 	
-	//将突变线分割为两部分
-	this->initUpDown(mesh);
+
 
 	//两条长边界线
 	vector<Point3d> BL2;//F2 Left
@@ -790,6 +782,17 @@ int bsp_Frame3::Up_Down(Point3d p)
 		return 0;
 
 	}
+}
+
+void bsp_Frame3::initUpDirection()
+{
+	//计算上方向
+	Point3d t1 = this->R - this->L;   //L->R
+	Point3d t2 = this->belongTo->f2->L - this->L;    //曲线2左端点->L(->R)
+
+	Vector13 tV1 = Vector13(t1.x, t1.y, t1.z);
+	Vector13 tV2 = Vector13(t2.x, t2.y, t2.z);
+	this->Up = tV1.crossmult(tV2);
 }
 
 void bsp_Frame3::initUpDown(Mesh & mesh)

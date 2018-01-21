@@ -1,5 +1,4 @@
-#include "bsp.h"
-
+#include "bsp_Frame2.h"
 bsp_Frame2::bsp_Frame2()
 {
 	this->featureVerts.clear();
@@ -16,8 +15,8 @@ bsp_Frame2::~bsp_Frame2()
 
 void bsp_Frame2::findLR(Mesh & mesh)
 {
-	Point3d &pfromL = getf3().L;
-	Point3d &pfromR = getf3().R;
+	Point3d &pfromL = this->belongTo->f3->L;
+	Point3d &pfromR = this->belongTo->f3->R;
 	vector<Point3d> points; //坏边上的点
 	for (size_t i = 0; i < this->inbadEdge.size(); ++i)
 	{
@@ -65,8 +64,8 @@ void bsp_Frame2::initUpDown(Mesh & mesh)
 		Point3d l0 = mesh.Verts[this->inbadEdge[i].first];
 		Point3d l1 = mesh.Verts[this->inbadEdge[i].second];
 
-		int UD1 = getf3().Up_Down(l0);
-		int UD2 = getf3().Up_Down(l1);
+		int UD1 = this->belongTo->f3->Up_Down(l0);
+		int UD2 = this->belongTo->f3->Up_Down(l1);
 
 		if (UD1 == 1 || UD2 == 1)
 		{
@@ -190,7 +189,7 @@ void bsp_Frame2::findfeatureVerts(Mesh & mesh)
 //不存入当前部件featureLines中
 void bsp_Frame2::findfeatureLines(Mesh & mesh)
 {
-	this->findLR(mesh);
-	this->initUpDown(mesh);
-	
+	//this->findLR(mesh);
+	//this->initUpDown(mesh);
+
 };

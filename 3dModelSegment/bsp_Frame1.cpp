@@ -1,6 +1,4 @@
-#include "bsp.h"
-
-
+#include "bsp_Frame1.h"
 bsp_Frame1::bsp_Frame1()
 {
 	this->featureVerts.clear();
@@ -8,13 +6,13 @@ bsp_Frame1::bsp_Frame1()
 	this->inbadEdge.clear();
 	this->inFacets.clear();
 	this->inVerts.clear();
-	
+
 }
 
 void bsp_Frame1::findLR(Mesh& mesh)
 {
-	Point3d &pfromL = getf3().L;
-	Point3d &pfromR = getf3().R;
+	Point3d &pfromL = this->belongTo->f3->L;
+	Point3d &pfromR = this->belongTo->f3->R;
 	vector<Point3d> points; //坏边上的点
 	for (size_t i = 0; i < this->inbadEdge.size(); ++i)
 	{
@@ -73,7 +71,7 @@ void bsp_Frame1::findCurve(Mesh & mesh)
 
 		// 平面3点  三角面片3点  生成两个交点
 		bool flag = PlaneByTri(
-			this->L, this->R, getf2().L,
+			this->L, this->R, this->belongTo->f2->L,
 			mesh.Verts[i1], mesh.Verts[i2], mesh.Verts[i3],
 			l0, l1
 		);
@@ -119,8 +117,8 @@ void bsp_Frame1::initUpDown(Mesh & mesh)
 		Point3d l0 = mesh.Verts[this->inbadEdge[i].first];
 		Point3d l1 = mesh.Verts[this->inbadEdge[i].second];
 
-		int UD1 = getf3().Up_Down(l0);
-		int UD2 = getf3().Up_Down(l1);
+		int UD1 = this->belongTo->f3->Up_Down(l0);
+		int UD2 = this->belongTo->f3->Up_Down(l1);
 
 		if (UD1 == 1 || UD2 == 1)
 		{
@@ -238,9 +236,9 @@ void bsp_Frame1::initUpDown(Mesh & mesh)
 //不存入当前部件featureLines中
 void bsp_Frame1::findfeatureLines(Mesh & mesh)
 {
-	this->findLR(mesh);
-	this->findCurve(mesh);
-	this->initUpDown(mesh);
+	//this->findLR(mesh);
+	//this->findCurve(mesh);
+	//this->initUpDown(mesh);
 };
 
 void bsp_Frame1::findfeatureVerts(Mesh & mesh)
