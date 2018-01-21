@@ -1,5 +1,4 @@
-#include "bsp.h"
-
+#include "bsp_Frame3.h"
 bsp_Frame3::bsp_Frame3()
 {
 
@@ -117,7 +116,7 @@ void bsp_Frame3::FindLine(Mesh& mesh, Point3d nowNode, Point3d endNode, vector<P
 	map<Point3d, vector<Point3d> > ptAdj;
 
 	vector<PII>::iterator it;   //定义前向迭代器 
-							 //中序遍历集合中的所有元素
+								//中序遍历集合中的所有元素
 	for (it = PIISet.begin(); it != PIISet.end(); it++)
 	{
 		Point3d p1 = mesh.Verts[(*it).first];
@@ -213,16 +212,25 @@ void bsp_Frame3::FindLine(Mesh& mesh, Point3d nowNode, Point3d endNode, vector<P
 //调用此方法需要保证f1 f2特征线计算完毕
 void bsp_Frame3::findfeatureLines(Mesh & mesh)
 {
+	//计算上方向
+	Point3d t1 = this->R - this->L;   //L->R
+	Point3d t2 = this->belongTo->f2->L - this->L;    //曲线2左端点->L(->R)
+
+	Vector13 tV1 = Vector13(t1.x, t1.y, t1.z);
+	Vector13 tV2 = Vector13(t2.x, t2.y, t2.z);
+	this->Up = tV1.crossmult(tV2);
+	
+	//将突变线分割为两部分
 	this->initUpDown(mesh);
 
 	//两条长边界线
 	vector<Point3d> BL2;//F2 Left
-	BL2.push_back(getf1().L);
-	BL2.push_back(getf2().L);
+	BL2.push_back(this->belongTo->f1->L);
+	BL2.push_back(this->belongTo->f2->L);
 
 	vector<Point3d> BR2;//F2 Right
-	BR2.push_back(getf1().R);
-	BR2.push_back(getf2().R);
+	BR2.push_back(this->belongTo->f1->R);
+	BR2.push_back(this->belongTo->f2->R);
 
 
 	vector<Point3d> BL3;
@@ -230,12 +238,12 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 
 	//两条长边界线
 	this->BorderL.first = this->L;
-	this->BorderL.second = getf2().L;
+	this->BorderL.second = this->belongTo->f2->L;
 	BL3.push_back(BorderL.first);
 	BL3.push_back(BorderL.second);
 
 	this->BorderR.first = this->R;
-	this->BorderR.second = getf2().R;
+	this->BorderR.second = this->belongTo->f2->R;
 	BR3.push_back(BorderR.first);
 	BR3.push_back(BorderR.second);
 
@@ -243,9 +251,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	vector<Point3d> TMPres;
 
 	/******************************************/
-	Point3d F = getf1().L;
-	Point3d L = getf1().R;
-	this->FindLine(mesh, F, L, getf1().UpCurve, TMPres, 0); //L1
+	Point3d F = this->belongTo->f1->L;
+	Point3d L = this->belongTo->f1->R;
+	this->FindLine(mesh, F, L, this->belongTo->f1->UpCurve, TMPres, 0); //L1
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -258,9 +266,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L1 计算完毕" << endl;
 
 	/******************************************/
-	F = getf2().L;
-	L = getf2().R;
-	this->FindLine(mesh, F, L, getf2().UpCurve, TMPres, 0); //L2
+	F = this->belongTo->f2->L;
+	L = this->belongTo->f2->R;
+	this->FindLine(mesh, F, L, this->belongTo->f2->UpCurve, TMPres, 0); //L2
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -273,9 +281,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L2 计算完毕" << endl;
 
 	/******************************************/
-	F = getf3().featureVerts[0];
-	L = getf3().featureVerts[1];
-	this->FindLine(mesh, F, L, getf3().UpCurve, TMPres, 0); //L3
+	F = this->belongTo->f3->featureVerts[0];
+	L = this->belongTo->f3->featureVerts[1];
+	this->FindLine(mesh, F, L, this->belongTo->f3->UpCurve, TMPres, 0); //L3
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -288,9 +296,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L3 计算完毕" << endl;
 
 	/******************************************/
-	F = getf3().featureVerts[2];
-	L = getf3().featureVerts[3];
-	this->FindLine(mesh, F, L, getf3().UpCurve, TMPres, 0); //L4
+	F = this->belongTo->f3->featureVerts[2];
+	L = this->belongTo->f3->featureVerts[3];
+	this->FindLine(mesh, F, L, this->belongTo->f3->UpCurve, TMPres, 0); //L4
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -303,9 +311,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L4 计算完毕" << endl;
 
 	/******************************************/
-	F = getf3().featureVerts[4];
-	L = getf3().featureVerts[5];
-	this->FindLine(mesh, F, L, getf3().UpCurve, TMPres, 0); //L5
+	F = this->belongTo->f3->featureVerts[4];
+	L = this->belongTo->f3->featureVerts[5];
+	this->FindLine(mesh, F, L, this->belongTo->f3->UpCurve, TMPres, 0); //L5
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -318,9 +326,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L5 计算完毕" << endl;
 
 	/******************************************/
-	F = getf1().L;
-	L = getf1().R;
-	this->FindLine(mesh, F, L, getf1().DownCurve, TMPres, 1); //L6
+	F = this->belongTo->f1->L;
+	L = this->belongTo->f1->R;
+	this->FindLine(mesh, F, L, this->belongTo->f1->DownCurve, TMPres, 1); //L6
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -334,9 +342,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L6 计算完毕" << endl;
 
 	/******************************************/
-	F = getf2().L;
-	L = getf2().R;
-	this->FindLine(mesh, F, L, getf2().DownCurve, TMPres, 0); //L7
+	F = this->belongTo->f2->L;
+	L = this->belongTo->f2->R;
+	this->FindLine(mesh, F, L, this->belongTo->f2->DownCurve, TMPres, 0); //L7
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -349,9 +357,9 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	cout << "L7 计算完毕" << endl;
 
 	/******************************************/
-	F = getf3().featureVerts[0];
-	L = getf3().featureVerts[5];
-	this->FindLine(mesh, F, L, getf3().RidgeLine, TMPres, 0); //L8
+	F = this->belongTo->f3->featureVerts[0];
+	L = this->belongTo->f3->featureVerts[5];
+	this->FindLine(mesh, F, L, this->belongTo->f3->RidgeLine, TMPres, 0); //L8
 	this->featureLines.push_back(TMPres);
 	if (TMPres[0] == F && TMPres[TMPres.size() - 1] == L)
 	{
@@ -363,7 +371,7 @@ void bsp_Frame3::findfeatureLines(Mesh & mesh)
 	}
 	cout << "L8 计算完毕" << endl;
 
-	this->featureLines.push_back(getf1().Curve); //L9
+	this->featureLines.push_back(this->belongTo->f1->Curve); //L9
 	cout << "L9 计算完毕" << endl;
 
 	this->featureLines.push_back(BR2);//L10
@@ -390,7 +398,7 @@ void bsp_Frame3::FindLine(Mesh& mesh, Point3d nowNode, Point3d endNode, vector<p
 	map<Point3d, vector<Point3d> > ptAdj;
 
 	vector<pair<Point3d, Point3d>>::iterator it;   //定义前向迭代器 
-								//中序遍历集合中的所有元素
+												   //中序遍历集合中的所有元素
 	for (it = PPSet.begin(); it != PPSet.end(); it++)
 	{
 		Point3d p1 = (*it).first;
@@ -486,11 +494,11 @@ void bsp_Frame3::findfeatureVerts(Mesh & mesh)
 {
 	this->featureVerts.push_back(this->L); //P1
 
-	//V型舵上点
-	this->Pnear2 = getvrudderL().featureVerts[4];
-	this->Pnear3 = getvrudderL().featureVerts[0];
-	this->Pnear4 = getvrudderR().featureVerts[0];
-	this->Pnear5 = getvrudderR().featureVerts[4];
+										   //V型舵上点
+	this->Pnear2 = this->belongTo->leftVRudder->featureVerts[4];
+	this->Pnear3 = this->belongTo->leftVRudder->featureVerts[0];
+	this->Pnear4 = this->belongTo->rightVRudder->featureVerts[0];
+	this->Pnear5 = this->belongTo->rightVRudder->featureVerts[4];
 
 	double minlento2 = DBL_MAX;
 	double minlento3 = DBL_MAX;
@@ -572,10 +580,10 @@ void bsp_Frame3::findfeatureVerts(Mesh & mesh)
 
 	this->featureVerts.push_back(this->R);  //P6
 
-	this->featureVerts.push_back(getf2().R);//P7
-	this->featureVerts.push_back(getf1().R);//P8
-	this->featureVerts.push_back(getf1().L);//P9
-	this->featureVerts.push_back(getf2().L);//P10
+	this->featureVerts.push_back(this->belongTo->f2->R);//P7
+	this->featureVerts.push_back(this->belongTo->f1->R);//P8
+	this->featureVerts.push_back(this->belongTo->f1->L);//P9
+	this->featureVerts.push_back(this->belongTo->f2->L);//P10
 
 
 
@@ -729,8 +737,8 @@ void bsp_Frame3::findRidgeLine(Mesh & mesh)
 	}
 
 	//根据左右V舵辨别左右
-	double LEN1 = (getvrudderL().featureVerts[4] - maxpos1).len();
-	double LEN2 = (getvrudderR().featureVerts[4] - maxpos1).len();
+	double LEN1 = (this->belongTo->leftVRudder->featureVerts[4] - maxpos1).len();
+	double LEN2 = (this->belongTo->rightVRudder->featureVerts[4] - maxpos1).len();
 	if (LEN1 < LEN2)
 	{
 		this->L = maxpos1;
@@ -746,14 +754,14 @@ void bsp_Frame3::findRidgeLine(Mesh & mesh)
 		cout << "Can not fnid left or right!" << endl;
 	}
 
-	//计算上下
-	Point3d t1 = this->R - this->L;   //L->R
-	Point3d t2 = getf2().L - this->L;    //曲线2左端点->L(->R)
+	////计算上下
+	//Point3d t1 = this->R - this->L;   //L->R
+	//Point3d t2 = this->belongTo->f2->L - this->L;    //曲线2左端点->L(->R)
 
-	Vector13 tV1 = Vector13(t1.x, t1.y, t1.z);
-	Vector13 tV2 = Vector13(t2.x, t2.y, t2.z);
+	//Vector13 tV1 = Vector13(t1.x, t1.y, t1.z);
+	//Vector13 tV2 = Vector13(t2.x, t2.y, t2.z);
 
-	this->Up = tV1.crossmult(tV2);
+	//this->Up = tV1.crossmult(tV2);
 
 
 }
@@ -761,9 +769,9 @@ void bsp_Frame3::findRidgeLine(Mesh & mesh)
 int bsp_Frame3::Up_Down(Point3d p)
 {
 	Point3d CenterOfF2;
-	CenterOfF2.x = (getf2().L.x + getf2().R.x) / 2;
-	CenterOfF2.y = (getf2().L.y + getf2().R.y) / 2;
-	CenterOfF2.z = (getf2().L.z + getf2().R.z) / 2;
+	CenterOfF2.x = (this->belongTo->f2->L.x + this->belongTo->f2->R.x) / 2;
+	CenterOfF2.y = (this->belongTo->f2->L.y + this->belongTo->f2->R.y) / 2;
+	CenterOfF2.z = (this->belongTo->f2->L.z + this->belongTo->f2->R.z) / 2;
 
 	Point3d temp = p - CenterOfF2;
 
@@ -793,8 +801,8 @@ void bsp_Frame3::initUpDown(Mesh & mesh)
 		Point3d l0 = mesh.Verts[this->RidgeLine[i].first];
 		Point3d l1 = mesh.Verts[this->RidgeLine[i].second];
 
-		int UD1 = getf3().Up_Down(l0);
-		int UD2 = getf3().Up_Down(l1);
+		int UD1 = this->belongTo->f3->Up_Down(l0);
+		int UD2 = this->belongTo->f3->Up_Down(l1);
 
 		if (UD1 == 1 || UD2 == 1)
 		{
